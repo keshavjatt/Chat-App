@@ -1,24 +1,28 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 const UserModel = require("../models/userModel");
 
 const getUserDetailsFromToken = async (token) => {
+    if (!token) {
+        return {
+            message: "Session out",
+            logout: true
+        };
+    }
+
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECREAT_KEY);
-
-        if (!decoded || !decoded.id) {
-            throw new Error("Invalid Token");
-        }
-
-        const user = await UserModel.findById(decoded.id);
+        const decode = jwt.verify(token, process.env.JWT_SECREAT_KEY); // JWT verify
+        const user = await UserModel.findById(decode.id).select('-password');
 
         if (!user) {
-            throw new Error("User not found");
+            return {
+                message: "User not found",
+                logout: true
+            };
         }
 
-        return user;
+        return user; // Return user if found
     } catch (error) {
-        console.error("Error in getUserDetailsFromToken:", error.message);
-        throw error;
+        throw new Error("Invalid token or expired session");
     }
 };
 

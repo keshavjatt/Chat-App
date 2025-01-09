@@ -2,31 +2,32 @@ const getUserDetailsFromToken = require("../helpers/getUserDetailsFromToken");
 
 async function userDetails(request, response) {
     try {
-        const token = request.cookies.token || null;
+        const token = request.cookies.token || "";
 
         if (!token) {
             return response.status(401).json({
-                message: "Token missing or session expired",
-                logout: true,
+                message: "No token provided",
+                logout: true
             });
         }
 
         const user = await getUserDetailsFromToken(token);
 
-        if (!user) {
-            return response.status(404).json({
-                message: "User not found",
+        if (user.logout) {
+            return response.status(401).json({
+                message: user.message,
+                logout: true
             });
         }
 
         return response.status(200).json({
-            message: "User Details fetched successfully",
-            data: user,
+            message: "User Details",
+            data: user
         });
     } catch (error) {
         return response.status(500).json({
             message: error.message || "Internal Server Error",
-            error: true,
+            error: true
         });
     }
 }
