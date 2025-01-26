@@ -72,6 +72,7 @@ const EditUserDetails = ({onClose, user}) => {
 
             if(response.data.success){
                 dispatch(setUser(response?.data?.data))
+                onClose()
             }
 
         } catch (error) {
