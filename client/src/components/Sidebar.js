@@ -11,10 +11,10 @@ import { FiArrowUpLeft } from "react-icons/fi"
 import SearchUser from './SearchUser';
 
 const Sidebar = () => {
-  const user = useSelector(state => state.user)
+  const user = useSelector(state => state?.user)
   const [editUserOpen, seteditUserOpen] = useState(false)
   const [allUser, setAllUser] = useState([])
-  const [openSearchUser, setOpenSearchUser] = useState(true)
+  const [openSearchUser, setOpenSearchUser] = useState(false)
 
   return (
     <div className='w-full h-full grid grid-cols-[48px,1fr] bg-white'>
@@ -74,7 +74,7 @@ const Sidebar = () => {
             </div>
         </div>
 
-        {/** Edit User Details **/}
+        {/** edit user details **/}
         {
             editUserOpen && (
                 <EditUserDetails onClose={()=>seteditUserOpen(false)} user={user} />
@@ -84,7 +84,7 @@ const Sidebar = () => {
         {/** search user **/}
         {
             openSearchUser && (
-                <SearchUser onClose={()=>openSearchUser(false)} />
+                <SearchUser onClose={()=>setOpenSearchUser(false)} />
             )
         }
 
