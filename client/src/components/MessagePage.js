@@ -7,6 +7,7 @@ import { FaAngleLeft } from "react-icons/fa6";
 import { FaPlus } from 'react-icons/fa6';
 import { FaImage } from 'react-icons/fa6';
 import { FaVideo } from 'react-icons/fa6';
+import uploadFile from '../helpers/uploadFiles';
 
 const MessagePage = () => {
   const params = useParams();
@@ -19,8 +20,42 @@ const MessagePage = () => {
     online: false,
     _id: ""
   });
+  const [openImageVideoUpload, setOpenImageVideoUpload] = useState(false)
+  const [message, setMessage] = useState({
+    text : "",
+    imageUrl : "",
+    videoUrl : ""
+  })
 
-  console.log("params", params?.userId);
+  const handleUploadImageVideoUpload = () => {
+    setOpenImageVideoUpload(preve => !preve)
+  }
+
+  const handleUploadImage = async(e) => {
+    const file = e.target.files[0]
+
+    const uploadPhoto = await uploadFile(file)
+
+    setMessage(preve => {
+      return{
+        ...preve,
+        imageUrl : uploadPhoto.url
+      }
+    })
+  }
+
+  const handleUploadVideo = async(e) => {
+    const file = e.target.files[0]
+
+    const uploadPhoto = await uploadFile(file)
+
+    setMessage(preve => {
+      return{
+        ...preve,
+        videoUrl : uploadPhoto.url
+      }
+    })
+  }
 
   useEffect(() => {
     if (socketConnection) {
@@ -66,34 +101,67 @@ const MessagePage = () => {
 
       {/** Show all message  **/}
       <section className='h-[calc(100vh-128px)] overflow-x-hidden overflow-y-scroll scrollbar'>
-        Show all message
+
+            {/** upload Image display **/}
+            {
+                message.imageUrl && (
+                  <div className='w-full h-full bg-slate-700 bg-opacity-30 flex justify-center items-center rounded overflow-hidden'>
+                      <div className='bg-white p-3'>
+                          <img
+                            src={message.imageUrl}
+                            width={300}
+                            height={300}
+                            alt='uploadImage' 
+                          />
+                      </div>
+                  </div>
+                )
+            }
+            
+            Show all message
       </section>
 
       {/** Send message **/}
       <section className='h-16 bg-white flex items-center px-4'>
         <div className='relative'>
-            <button className='flex justify-center items-center w-11 h-11 rounded-full hover:bg-primary hover:text-white'>
+            <button onClick={handleUploadImageVideoUpload} className='flex justify-center items-center w-11 h-11 rounded-full hover:bg-primary hover:text-white'>
                 <FaPlus size={20} />
             </button>
 
             {/** Video and Image **/}
-            <div className='bg-white shadow rounded absolute bottom-14 w-36 p-2'>
-                <form>
-                    <label htmlFor='uploadImage' className='flex items-center p-2 px-3 gap-3 hover:bg-slate-200 cursor-pointer'>
-                        <div className='text-primary'>
-                            <FaImage size={18} />
-                        </div>
-                        <p>Image</p>
-                    </label>
+            {
+              openImageVideoUpload && (
+                <div className='bg-white shadow rounded absolute bottom-14 w-36 p-2'>
+                  <form>
+                      <label htmlFor='uploadImage' className='flex items-center p-2 px-3 gap-3 hover:bg-slate-200 cursor-pointer'>
+                          <div className='text-primary'>
+                              <FaImage size={18} />
+                          </div>
+                          <p>Image</p>
+                      </label>
 
-                    <label htmlFor='uploadVideo' className='flex items-center p-2 px-3 gap-3 hover:bg-slate-200 cursor-pointer'>
-                        <div className='text-purple-500'>
-                            <FaVideo size={18} />
-                        </div>
-                        <p>Video</p>
-                    </label>
-                </form>
-            </div>
+                      <label htmlFor='uploadVideo' className='flex items-center p-2 px-3 gap-3 hover:bg-slate-200 cursor-pointer'>
+                          <div className='text-purple-500'>
+                              <FaVideo size={18} />
+                          </div>
+                          <p>Video</p>
+                      </label>
+
+                      <input 
+                        type='file'
+                        id='uploadImage'
+                        onChange={handleUploadImage}
+                      />
+
+                      <input 
+                        type='file'
+                        id='uploadVideo'
+                        onChange={handleUploadVideo}
+                      />
+                  </form>
+                </div>
+              )
+            }
         </div>
       </section>
     </div>
