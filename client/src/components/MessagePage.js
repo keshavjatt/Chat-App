@@ -191,8 +191,6 @@ const MessagePage = () => {
                                   />
                                 )
                               }
-                            </div>
-                            <div className='w-full'>
                               {
                                 msg?.videoUrl && (
                                   <video
