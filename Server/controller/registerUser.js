@@ -1,22 +1,22 @@
-const UserModel = require("../models/userModel");
-const bcryptjs = require('bcryptjs');
+const UserModel = require("../models/UserModel")
+const bcryptjs = require('bcryptjs')
 
 async function registerUser(request,response){
     try {
-        const { name, email, password, profile_pic } = request.body
+        const { name, email , password, profile_pic } = request.body
 
-        const checkEmail = await UserModel.findOne({ email }) // check mail in database
+        const checkEmail = await UserModel.findOne({ email }) //{ name,email}  // null
 
         if(checkEmail){
             return response.status(400).json({
-                message : "Already user exist",
+                message : "Already user exits",
                 error : true,
             })
         }
 
-        // password into hashpassword
+        //password into hashpassword
         const salt = await bcryptjs.genSalt(10)
-        const hashpassword = await bcryptjs.hash(password, salt)
+        const hashpassword = await bcryptjs.hash(password,salt)
 
         const payload = {
             name,

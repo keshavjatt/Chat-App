@@ -1,6 +1,6 @@
-const UserModel = require("../models/userModel")
+const UserModel = require("../models/UserModel")
 
-async function checkEmail(request, response){
+async function checkEmail(request,response){
     try {
         const { email } = request.body
 
@@ -8,7 +8,7 @@ async function checkEmail(request, response){
 
         if(!checkEmail){
             return response.status(400).json({
-                message : "User not exist",
+                message : "user not exit",
                 error : true
             })
         }

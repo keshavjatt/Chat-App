@@ -1,10 +1,10 @@
-const express = require('express');
-const cors = require('cors');
+const express = require('express')
+const cors = require('cors')
 require('dotenv').config()
-const connectDB = require('./config/connectDB');
-const router = require('./routes/index');
-const cookieParser = require('cookie-parser');
-const { app, server } = require('./socket/index');
+const connectDB = require('./config/connectDB')
+const router = require('./routes/index')
+const cookiesParser = require('cookie-parser')
+const { app, server } = require('./socket/index')
 
 // const app = express()
 app.use(cors({
@@ -12,21 +12,21 @@ app.use(cors({
     credentials : true
 }))
 app.use(express.json())
-app.use(cookieParser())
+app.use(cookiesParser())
 
 const PORT = process.env.PORT || 8080
 
-app.get('/', (request,response)=>{
+app.get('/',(request,response)=>{
     response.json({
-        message : "server running at "+ PORT
+        message : "Server running at " + PORT
     })
 })
 
-// api endpoints
-app.use('/api', router)
+//api endpoints
+app.use('/api',router)
 
 connectDB().then(()=>{
     server.listen(PORT,()=>{
-        console.log("server running at "+ PORT)
+        console.log("server running at " + PORT)
     })
 })

@@ -5,12 +5,12 @@ import toast, { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
-     <>
-         <Toaster />
-         <main>
-            <Outlet />
-         </main>
-     </>
+   <> 
+      <Toaster/>
+       <main >
+        <Outlet/>
+       </main>
+   </>
   );
 }
 
