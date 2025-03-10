@@ -8,7 +8,8 @@ const { app, server } = require('./socket/index')
 
 // const app = express()
 app.use(cors({
-    origin: true, // Allow all origins
+    origin : process.env.FRONTEND_URL,
+    // origin: true, // Allow all origins
     credentials: true, // Allow credentials (cookies, authorization headers, etc.)
 }))
 app.use(express.json())
